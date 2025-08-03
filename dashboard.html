@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center min-vh-100 bg-light">
+
+    <div class="text-center mb-3">
+        <h4>👋 Welcome, {{ username }}</h4>
+        <p class="font-weight-bold">💰 Current Balance: ₹{{ balance }}</p>
+        <div>
+            <a href="{{ url_for('deposit') }}" class="btn btn-success m-2">➕ Deposit</a>
+            <a href="{{ url_for('withdraw') }}" class="btn btn-danger m-2">➖ Withdraw</a>
+         <a href="{{ url_for('history') }}" class="btn btn-teal m-2 ">📋 Transfer History</a>
+            <a href="{{ url_for('transfer') }}" class="btn btn-info m-2">🔁 Transfer</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-secondary m-2">🚪 Logout</a>
+
+        </div>
+    </div>
+
+    <!-- Transaction History Table -->
+    <div class="shadow p-3 mb-4 bg-white rounded w-75">
+        <h5 class="text-center">📜 Transaction History</h5>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ t.type.title() }}</td>
+                    <td class="{% if t.type in ['deposit', 'receive'] %}text-success{% else %}text-danger{% endif %}">
+                      {% if t.type in ['deposit', 'receive'] %}+{% else %}-{% endif %}₹{{ t.amount }}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Monthly Pie Chart -->
+<div class="shadow p-4 bg-white rounded w-50">
+    <h5 class="text-center mb-3">📊 Monthly Summary</h5>
+
+    <div class="form-group">
+        <label for="monthSelect">Select Month:</label>
+        <select id="monthSelect" class="form-control">
+            {% for month in monthly_summary %}
+                <option value="{{ month }}">{{ month }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <canvas id="pieChart" width="300" height="300"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+   const monthlyData = {{ monthly_summary | tojson }};
+const monthSelect = document.getElementById('monthSelect');
+const ctx = document.getElementById('pieChart').getContext('2d');
+
+function getChartData(month) {
+    const data = monthlyData[month] || { inflows: 0, outflows: 0 };
+    return [data.inflows, data.outflows];
+}
+
+let chart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Inflows (Deposits & Receives)', 'Outflows (Withdrawals & Transfers)'],
+        datasets: [{
+            data: getChartData(monthSelect.value),
+            backgroundColor: ['#17a2b8', '#fd7e14'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `${context.label}: ₹${context.parsed}`;
+                    }
+                }
+            }
+        }
+    }
+});
+
+monthSelect.addEventListener('change', function () {
+    chart.data.datasets[0].data = getChartData(this.value);
+    chart.update();
+});
+
+</script>
+
+
+{% endblock %}

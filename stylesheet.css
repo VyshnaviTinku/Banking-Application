@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+}
+
+h4, h5 {
+    color: #343a40;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.shadow {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn {
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+.min-vh-100 {
+    min-height: 100vh;
+}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5 d-flex justify-content-center align-items-center min-vh-100 bg-light">
+
+    <div class="card shadow-lg p-5 rounded w-50" style="background: linear-gradient(to bottom right, #f8f9fa, #e2e6ea);">
+        <h3 class="text-center text-primary mb-4" style="font-weight: 600;">💸 Transfer Money</h3>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="recipient" class="form-label fw-bold text-dark">👤 Recipient Username</label>
+                <input type="text" class="form-control shadow-sm" name="recipient" id="recipient" placeholder="e.g., john_doe" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="amount" class="form-label fw-bold text-dark">💰 Amount (₹)</label>
+                <input type="number" step="0.01" class="form-control shadow-sm" name="amount" id="amount" placeholder="Enter amount" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 fw-bold" style="letter-spacing: 1px;">🚀 Send Money</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('dashboard') }}" class="text-decoration-none text-muted">⬅️ Back to Dashboard</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Optional JS for form validation -->
+<script>
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-box shadow p-4">
+    <h3 class="text-center">💰 Deposit Funds</h3>
+    <form method="POST">
+        <div class="form-group">
+            <label>Amount to deposit</label>
+            <input type="number" name="amount" step="0.01" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success btn-block">Deposit</button>
+    </form>
+</div>
+{% endblock %}

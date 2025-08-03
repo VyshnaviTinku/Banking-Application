@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5 min-vh-100">
+    <div class="card shadow-lg rounded-4 p-4 bg-light">
+        <h2 class="text-center text-dark mb-4" style="font-family: 'Segoe UI', sans-serif;">
+            🧾 Transfer History
+        </h2>
+
+        {% if transactions %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover shadow-sm rounded-3">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th style="font-family: 'Verdana', sans-serif;">Counterparty</th>
+                        <th style="font-family: 'Verdana', sans-serif;">Timestamp</th>
+                        <th style="font-family: 'Verdana', sans-serif;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for txn in transactions %}
+                    <tr class="text-center">
+                        <td class="fw-semibold">{{ txn.counterparty }}</td>
+                        <td>{{ txn.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td class="fw-bold" style="color: {% if txn.type == 'transfer' %}red{% else %}green{% endif %}; 
+                        font-family: 'Courier New', monospace;">
+
+                            {% if txn.type == 'transfer' %}
+                                -₹{{ txn.amount }}
+                            {% else %}
+                                +₹{{ txn.amount }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary shadow-sm px-4 py-2 rounded-pill">
+        ⬅️ Back to Dashboard
+    </a>
+</div>
+        {% else %}
+        <div class="alert alert-info shadow-sm text-center" role="alert">
+            No transaction history found.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

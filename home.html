@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center mt-5">
+    <h2>Welcome to ASL Bank</h2>
+    <a href="{{ url_for('login') }}" class="btn btn-success m-2">Login</a>
+    <a href="{{ url_for('register') }}" class="btn btn-primary m-2">Register</a>
+</div>
+{% endblock %}
